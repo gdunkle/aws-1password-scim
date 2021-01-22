@@ -10,8 +10,14 @@ Parameters:
       VPC-ID of your existing Virtual Private Cloud (VPC) where you want to
       depoy the scime bridge to.
     Type: 'AWS::EC2::VPC::Id'
-  Subnets:
-    ConstraintDescription: must be list of existing subnet Ids
+  PublicSubnets:
+    ConstraintDescription: must be list of existing public subnet Ids
+    Description: >-
+      At least two existing Subnets in separate Availability Zones your Virtual
+      Private Cloud (VPC)
+    Type: 'List<AWS::EC2::Subnet::Id>'
+  PrivateSubnets:
+    ConstraintDescription: must be list of existing private subnet Ids
     Description: >-
       At least two existing Subnets in separate Availability Zones your Virtual
       Private Cloud (VPC)
@@ -73,7 +79,7 @@ Resources:
       ContainerDefinitions:
         - Name: "scim-bridge"
           Essential: true
-          Image: "1password/scim:v1.6.1"
+          Image: "1password/scim:latest"
           Cpu: 128
           Memory: 512
           DependsOn:
@@ -136,7 +142,7 @@ Resources:
           AssignPublicIp: DISABLED
           SecurityGroups:
             - !Ref SecurityGroups
-          Subnets: !Ref Subnets
+          Subnets: !Ref PrivateSubnets
       SchedulingStrategy: REPLICA
       ServiceName: "scim-bridge"
       TaskDefinition: !Ref TaskDefinition
@@ -149,7 +155,7 @@ Resources:
       LoadBalancerAttributes:
         - Key: idle_timeout.timeout_seconds
           Value: '60'
-      Subnets: !Ref Subnets
+      Subnets: !Ref PublicSubnets
       SecurityGroups:
         - !Ref SecurityGroups
 

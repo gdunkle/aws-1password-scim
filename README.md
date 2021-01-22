@@ -26,7 +26,11 @@ _Note:_ You have to manually create an S3 bucket with the name "$DIST_OUTPUT_BUC
     "ParameterValue": "<vpc id>>"
   },
   {
-    "ParameterKey": "Subnets",
+    "ParameterKey": "PublicSubnets",
+    "ParameterValue": "<ids of subnets to deploy containers to>"
+  },
+  {
+    "ParameterKey": "PrivateSubnets",
     "ParameterValue": "<ids of subnets to deploy containers to>"
   },
   {
